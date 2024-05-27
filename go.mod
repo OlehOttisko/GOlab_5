@@ -1,4 +1,4 @@
-module github.com/Dimasenchylo/kpi-lab4
+module github.com/Walik23/GOlab_4
 
 go 1.22
 
