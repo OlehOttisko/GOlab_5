@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dimasenchylo/kpi-lab4/httptools"
-	"github.com/Dimasenchylo/kpi-lab4/signal"
+	"github.com/Walik23/GOlab_4/httptools"
+	"github.com/Walik23/GOlab_4/signal"
 )
 
 var (
