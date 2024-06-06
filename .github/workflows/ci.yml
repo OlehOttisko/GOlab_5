@@ -1,6 +1,6 @@
 
 
-name: Test
+name: Build and run
 
 on:
   push:
