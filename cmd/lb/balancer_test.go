@@ -4,19 +4,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
+	. "gopkg.in/check.v1"
 )
 
-func TestSuite(t *testing.T) {
-	suite.Run(t, new(BalancerSuite))
-}
+func Test(t *testing.T) { TestingT(t) }
 
-type BalancerSuite struct {
-	suite.Suite
-}
+type BalancerSuite struct{}
 
-func (s *BalancerSuite) TestBalancer() {
+var _ = Suite(&BalancerSuite{})
+
+func (s *BalancerSuite) TestBalancer(c *C) {
 	healthChecker := &HealthChecker{}
 	healthChecker.healthyServers = []string{"server1:8080", "server2:8080", "server3:8080"}
 
@@ -41,12 +38,12 @@ func (s *BalancerSuite) TestBalancer() {
 		"server3:8080": 100,
 	}, []string{"server1:8080", "server2:8080", "server3:8080"})
 
-	assert.Equal(s.T(), 0, index1)
-	assert.Equal(s.T(), 1, index2)
-	assert.Equal(s.T(), 2, index3)
+	c.Assert(index1, Equals, 0)
+	c.Assert(index2, Equals, 1)
+	c.Assert(index3, Equals, 2)
 }
 
-func (s *BalancerSuite) TestHealthChecker() {
+func (s *BalancerSuite) TestHealthChecker(c *C) {
 	healthChecker := &HealthChecker{}
 	healthChecker.health = func(s string) bool {
 		if s == "1" {
@@ -64,7 +61,7 @@ func (s *BalancerSuite) TestHealthChecker() {
 
 	time.Sleep(2 * time.Second)
 
-	assert.Equal(s.T(), "2", healthChecker.GetHealthyServers()[0])
-	assert.Equal(s.T(), "3", healthChecker.GetHealthyServers()[1])
-	assert.Equal(s.T(), 2, len(healthChecker.GetHealthyServers()))
+	c.Assert(healthChecker.GetHealthyServers()[0], Equals, "2")
+	c.Assert(healthChecker.GetHealthyServers()[1], Equals, "3")
+	c.Assert(len(healthChecker.GetHealthyServers()), Equals, 2)
 }
