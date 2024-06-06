@@ -20,12 +20,6 @@ jobs:
       with:
         go-version: '1.22'
 
-    - name: Build test network manager
-      run: go build -o manager  ./testnet-manager/...
-
-    - name: Run test network manager
-      run:  ./manager &
-
     - name: Run integration test
       run: docker compose -f docker-compose.yaml -f docker-compose.test.yaml up --build --force-recreate --exit-code-from test
 
