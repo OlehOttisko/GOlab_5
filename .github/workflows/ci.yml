@@ -1,36 +1,36 @@
-name: Build and run
+name: Ci
+
 on:
-  pull_request:
-    branches:
-      - "*"
   push:
-    branches:
-      - "*"
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+
+  tests:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Update packages
-        run: |
-          go get -u ./...
-          go mod download
-          go mod tidy
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.22'
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.22"
+    - name: Build test network manager
+      run: go build -o manager  ./testnet-manager/...
 
-      - name: Build main
-        run: go build ./cmd/stats/main.go
+    - name: Run test network manager
+      run:  ./manager &
 
-      - name: Build Docker image
-        run: docker build -t app .
+    - name: Run integration test
+      run: docker compose -f docker-compose.yaml -f docker-compose.test.yaml up --build --force-recreate --exit-code-from test
 
-      - name: Running integration test
-        run: docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up --exit-code-from test
+    - name: Build unit test launcher
+      run: docker build -t unit:test -f unit-test.dockerfile .
+
+    - name: Run unit test
+      run: docker run --rm unit:test
