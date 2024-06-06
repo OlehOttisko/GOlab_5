@@ -48,7 +48,7 @@ func (s *IntegrationSuite) TestBalancer(c *C) {
 	}
 
 	responseSize := 0
-	serverNum := [6]int{1, 2, 3, 1, 3, 2}
+	serverNum := [6]int{1, 2, 3, 1, 2, 3}
 	for i := 0; i < 6; i++ {
 		if i%2 == 0 {
 			responseSize = 1000
