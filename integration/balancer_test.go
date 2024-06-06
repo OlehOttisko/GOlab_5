@@ -56,7 +56,8 @@ func (s *IntegrationSuite) TestBalancer(c *C) {
 			responseSize = 2000
 		}
 		server, _ := sendRequest(baseAddress, responseSize, &client)
-		c.Assert(server.Header.Get("lb-from"), Equals, fmt.Sprintf("server%d:8080", serverNum[i]))
+		c.Assert(server.Header.Get("lb-from"), Equals, fmt.Sprintf("server%d:8080", serverNum[i]+1))
+
 	}
 }
 
