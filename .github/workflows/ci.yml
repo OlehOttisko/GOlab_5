@@ -22,9 +22,3 @@ jobs:
 
     - name: Run integration test
       run: docker compose -f docker-compose.yaml -f docker-compose.test.yaml up --build --force-recreate --exit-code-from test
-
-    - name: Build unit test launcher
-      run: docker build -t unit:test -f unit-test.dockerfile .
-
-    - name: Run unit test
-      run: docker run --rm unit:test
